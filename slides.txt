@@ -1,0 +1,531 @@
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=plain
+
+    o         |              |    o
+    .,---.    |--- ,---.,---.|    .,---.,---.
+    |`---.    |    |   ||   ||    ||   ||   |
+    |`---'    `---'`---'`---'`---'``   '`---|
+`---'                                   `---'
+
+            nathaniel smith
+                     cmgdst
+                 2012-05-16
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=plain
+
+                        |
+,---.,---.,---.,---.,---|,---.
+,---||   ||---'|   ||   |,---|
+`---^`---|`---'`   '`---'`---^
+     `---'
+
+
+ * libraries
+  * underscore
+  * async
+  * sammyjs
+ * tools
+  * ubuntu node pkgs
+  * ff dev tools
+  * chromium dev tools
+ * Q&A
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=plain
+
+              |
+.   .,---.,---|,---.,---.,---.,---.,---.,---.,---.
+|   ||   ||   ||---'|    `---.|    |   ||    |---'
+`---'`   '`---'`---'`    `---'`---'`---'`    `---'
+
+non-polluting "utility belt" for javascript. Fills many gaps in the standard
+offerings of js without modifying built-in objects.
+
+way too many helpers to list, but we'll cover some of the most heavily used ones.
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=javascript
+
+
+// Collections
+
+console.log( _.map([1, 2, 3], function(x) { return x*x }) )
+
+console.log( _.filter([1,2,3], function(x) {return x % 2 == 0}) )
+
+_.each({hi:'there', you:'guys'}, function(value, key) {
+    console.log(key, value)
+})
+
+
+var movies = [{
+    name: 'Alphaville',
+    genre: 'noire'
+}, {
+    name: 'Solaris',
+    genre: 'scifi',
+}, {
+    name: 'Blade Runner',
+    genre: 'scifi'
+}, {
+    name: 'Ghostbusters',
+    genre: 'comedy'
+}, {
+    name: 'Mallrats',
+    genre: 'comedy'
+}]
+
+console.log(
+    _.groupBy(movies, function(movie) {
+        return movie.genre
+    })
+)
+
+console.log( _.any([1,2,3,4,5], function(x) { return x === 3 }) )
+
+
+// max, min, sortBy, all...
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=javascript
+
+// Arrays
+
+console.log( _.range(0, 10) )
+console.log( _.range(0, 10, 2) )
+
+// deduped merger
+console.log( _.union([1,2,3], [3,2,7]) )
+
+// values in left not in right(s)
+console.log( _.difference([1,2,3], [3,2,7]) )
+
+// shared values
+console.log( _.intersection([1,2,3], [3,2,7]) )
+
+console.log( _.first([1,2,3,4]) )
+
+console.log( _.initial([1,2,3,4]) )
+
+console.log( _.rest([1,2,3,4]) )
+
+console.log( _.last([1,2,3,4]) )
+
+console.log( _.uniq([1,2,2,2,1,2,1,1,2,1,2,1]) )
+
+// flatten, zip, indexOf...
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=javascript
+
+// Functions
+
+// bind has two uses; binding a function to an object and partially applying arguments.
+
+var add_three = function(x,y,z) { return x+y+z }
+console.log( add_three(4,1,2) )
+
+var add_two_to_four = _.bind(add_three, null, 4)
+console.log( add_two_to_four(1,2) )
+
+var greet = function() { console.log('greetings, ' + this.name) }
+
+var vivian = {name:'vivian'}
+
+greet.call(vivian)
+
+var greet_vivian = _.bind(greet, vivian)
+
+greet_vivian()
+
+// delay is essentially a setTimeout
+
+_.delay(function(name){ console.log('hi,'+name) }, 1000, 'nate')
+
+// defer lets us avoid setTimeout(fun, 0) hacks
+
+_.defer(function() {})
+
+// compose is fun
+
+var greet = function(name) { return 'hi, ' + name }
+var exclaim = function(str) { return str + '!' }
+
+var excitable = _.compose(exclaim, greet)
+
+console.log( excitable('garfunkel') )
+
+
+// once, memoize, throttle...
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=javascript
+
+// Objects
+
+// standardized keys, values functions
+console.log( _.keys({hi:'there', you:'guys'}) )
+console.log( _.values({hi:'there', you:'guys'}) )
+
+// find all the functions
+console.log( _.functions(_) )
+
+// object merge
+
+var person = _.extend({name:'howard', hobby:'stamps'}, {age:13}, {height:'6'})
+
+console.log( person )
+
+// select only certain fields
+
+console.log( _.pick(person, 'hobby', 'age') )
+
+// membership
+
+console.log( _.has(person, 'hobby') )
+
+// identity methods, isEqual, clone, defaults...
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=javascript
+
+// Chaining
+
+var stooges = [{name : 'curly', age : 25}, {name : 'moe', age : 21}, {name : 'larry', age : 23}];
+var youngest = _.chain(stooges)
+  .sortBy(function(stooge){ return stooge.age; })
+  .map(function(stooge){ return stooge.name + ' is ' + stooge.age; })
+  .first()
+  .value();
+
+console.log( youngest )
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=plain
+
+Meta:
+
+http://documentcloud.github.com/underscore/
+
+All this in 4kb minified and gzipped. Great for both node and browser.
+
+Highly recommended.
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=plain
+
+,---.,---.,   .,---.,---.
+,---|`---.|   ||   ||
+`---^`---'`---|`   '`---'
+          `---'
+
+async.js provides helpful utilities for asynchronous code.
+
+use it when you have to...
+
+ * make async calls for many things in a list (or dict)
+ * chain together many async calls (ie callback soup)
+ * do a series of async tasks in order
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=javascript
+
+
+// Collections
+
+// transform one list into another using an async iterator
+
+async.map([1,2,3], function(id, cb) {
+    acquire_monkey(id, function(monkey) {
+        cb(null, monkey);
+    });
+}, function(err, results) {
+    console.log(results);
+    // find_friends(results);
+});
+
+
+// perform a side-effecty async iterator on a list
+
+var find_friends = function(monkies) {
+    async.forEach(monkies, function(monkey, cb) {
+        acquire_monkey(monkey.friend, function(friend) {
+            console.log(monkey.name + ' is friends with ' + friend.name);
+            cb()
+        })
+    }, function(err) {
+        console.log('all done!');
+    });
+}
+
+// filter, reject, reduce, concat...
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=javascript
+
+// Control Flow
+
+// perform a bunch of async tasks in series, preserving order
+
+async.series([
+    function(cb) { acquire_monkey(0, function(m) { 
+        _.delay(function() {
+            console.log('function 1');
+            cb(null, m); }, 1000);
+    })},
+    function(cb)  { acquire_monkey(1, function(m) { 
+        console.log('function 2');
+        cb(null, m); }) }
+], function(err, results) {
+    console.log(results);
+});
+
+
+// perform tasks in "parallel;" ie, take results as you get them and order them
+// at the end.
+
+async.parallel([
+    function(cb) { acquire_monkey(0, function(m) { 
+        console.log('function 1');
+        cb(null, m); })},
+    function(cb) { acquire_monkey(1, function(m) { 
+        _.delay(function() {
+            console.log('function 2');
+            cb(null, m); }, 1000); })},
+    function(cb) { acquire_monkey(2, function(m) { 
+        console.log('function 3');
+        cb(null, m); }) },
+    function(cb) { acquire_monkey(3, function(m) { 
+        console.log('function 4');
+        cb(null, m); }) },
+    function(cb)  { acquire_monkey(4, function(m) { 
+        console.log('function 5');
+        cb(null, m); }) }
+], function(err, results) {
+    console.log(results);
+});
+
+
+// waterfall: nest calls
+
+async.waterfall([
+    function(cb) {
+        acquire_monkey(5, function(m) {
+            cb(null, m);
+        });
+    },
+    function(monkey, cb) {
+        acquire_monkey(monkey.friend, function(m) {
+            cb(null, m.name);
+        })
+    }
+], function(err, result) {
+    console.log(result);
+});
+
+
+// until, whilst, queue, auto...
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=javascript
+
+// mongoose-y (mongodb) style example with waterfall
+
+async.waterfall([
+    function(cb)             { User.findOne({username:'bob'}).select('_id').run(cb); },
+    function(user_id, cb)    { Comment.findOne({user:user_id}).select('_id').run(cb); },
+    function(comment_id, cb) { Like.find({comment:comment_id}, cb); }
+], function(err, likes) {
+    // do something with likes
+});
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=javascript
+
+// Without async...
+
+User.findOne({username:'bob'}, function(err, user) {
+    Comment.find({user:user._id}, function(err, comments) {
+        Like.find({comment:comments[0]._id}, function(err, likes) {
+            // do something with likes
+        });
+    });
+});
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=coffee
+
+# PROTIP: this is really nice with coffeescript
+
+async.waterfall([
+    (cb) -> User.findOne(username:'bob').select('_id').run(cb),
+    (user_id, cb) -> Comment.findOne(user:user_id).select('_id').run(cb),
+    (comment_id, cb) -> Like.find(comment:comment_id).run(cb),
+], (e, likes) ->
+    # do something with likes
+)
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=javascript
+
+// Totally bootleg regex search
+
+var regex = new RegExp(".*#{q}.*");
+async.parallel({
+    users: function(cb) { User.find({searchable:true}).only('username').regex('username', regex).run(cb) },
+    texts: function(cb) { Text.find().regex('desc', regex).run(cb) },
+    categories: function(cb) {
+        Text.find()
+            .only('category category_slug')
+            .regex('category', regex)
+            .asc('category')
+            .run(function(e, list) {
+                if (e) { return next(new DBError(e)); }
+                if (!list) { return cb([]); }
+
+            var uniq = function(x) { return x.category; }
+            var pick = function(x) { return _.pick(x, 'category', 'category_slug'); }
+
+            cb(_.map(_.uniq(list, true, uniq), pick))
+        })
+    }
+}, function(err, results) {
+    if (err) { return next(new DBError(e)); }
+
+    // do something with results, which looks like:
+    /*
+    {
+        users: [
+            {username:'bob'},
+            {username:'april'}
+        ],
+        texts: [
+            {desc:'great text', slug:'cool/text'},
+            {desc:'bad text', slug:'lame/text'}
+        ],
+        categories: [
+            {'category':'short story', 'category_slug':'short_story'},
+            {'category':'script', 'category_slug':'script'},
+        ]
+    }
+    */
+
+})
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=plain
+
+                              o
+,---.,---.,-.-.,-.-.,   .     .,---.
+`---.,---|| | || | ||   |     |`---.
+`---'`---^` ' '` ' '`---|o    |`---'
+                    `---' `---'
+
+* Sinatra style front end web framework
+* wide variety of plugins for templating and storage
+* Ajax helpers
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=javascript
+
+// weather app
+var app = Sammy('#main', function() {
+    this.before({}, function() {
+        this.zipcodes = localStorage.get('zipcodes');
+    });
+
+    this.get('#/', function() {
+        this.load('/data/weather/?zipcodes=' + this.zipcodes.join('|'))
+            .renderEach('/templates/weather_for_zip.mustache')
+            .swap();
+    });
+
+    this.post('#/add_zip', function() {
+        $.ajax({
+            url:'/add/zip',
+            data:this.params,
+            type:'POST',
+            context:this,
+            success: function(data) {
+                this.redirect('#/');
+            },
+            error: function(data) {
+                conole.error('OH NOES');
+                this.redirect('#/')
+            }
+        });
+    });
+});
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=markdown
+
+# Tools
+
+PSA: Ubuntu 12.04 has up-to-date copies of:
+
+ * nodejs
+ * npm
+ * mongodb
+
+    $ sudo apt-get install nodejs npm mongodb
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=markdown
+
+# Tools
+
+FF has vastly improved HTML/CSS inspection utilities:
+
+ * interactive inspect
+ * editor
+ * hierarchial view
+ * CSS explorer/editor
+ * 3d view (!)
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+POSERO>> set ft=markdown
+
+# Tools
+
+Chomium has two features of note, now:
+
+ * DOCK TO RIGHT
+ * source maps
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POSERO>> let b:posero_push_all = 1
+
+questions?
+
+thanks!
+
+
